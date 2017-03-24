@@ -82,17 +82,17 @@ def show_images_tensor_save(samples):
 def generator(input_noise, reuse = False, is_training=False):
 
     u_0 = op.linear_layer(input_noise, 'g_0', 100*2*7*7, reuse = reuse, is_training=is_training)
-    u_0 = tf.contrib.layers.batch_norm(u_0, center=True, scale=True, 
-                                          is_training=is_training, reuse = reuse,
-                                          scope='g_0_bn')
+    # u_0 = tf.contrib.layers.batch_norm(u_0, center=True, scale=True, 
+    #                                       is_training=is_training, reuse = reuse,
+    #                                       scope='g_0_bn')
     h_0 = tf.nn.relu(u_0)
     h_0 = tf.reshape(h_0,  tf.pack( [ tf.shape(h_0)[0], 7, 7, 100 * 2] )   ) 
     
 
     u_1 = op.deconv2d(h_0, 'g_1', [ tf.shape(h_0)[0], 7*2, 7*2, 100 * 1]  , reuse = reuse) 
-    u_1 = tf.contrib.layers.batch_norm(u_1, center=True, scale=True, 
-                                          is_training=is_training, reuse = reuse,
-                                          scope='g_1_bn')
+    # u_1 = tf.contrib.layers.batch_norm(u_1, center=True, scale=True, 
+    #                                       is_training=is_training, reuse = reuse,
+    #                                       scope='g_1_bn')
     h_1 = tf.nn.relu(u_1)
 
 
@@ -101,6 +101,7 @@ def generator(input_noise, reuse = False, is_training=False):
     
     return h_2
 
+
 def discriminator(input_images, reuse = False, is_training=False):
     #x = tf.reshape(input_images,  tf.pack([ tf.shape(input_images)[0],  28*28 ]) )   
     
@@ -108,14 +109,14 @@ def discriminator(input_images, reuse = False, is_training=False):
 
     u_0 = op.convolution(input_images, 'd_0', 1, d, 3, reuse=reuse, is_training=is_training, stride = 2)
     h_0 = op.lrelu(u_0)
-    if is_training:
-        h_0 = tf.nn.dropout(h_0, 0.25)
+    # if is_training:
+    #     h_0 = tf.nn.dropout(h_0, 0.25)
 
 
     u_1 = op.convolution(h_0, 'd_1', d, d*2, 3, reuse=reuse, is_training=is_training, stride = 2)
     h_1 = op.lrelu(u_1)
-    if is_training:
-        h_1 = tf.nn.dropout(h_1, 0.25)
+    # if is_training:
+    #     h_1 = tf.nn.dropout(h_1, 0.25)
 
     dim = h_1.get_shape()
     h_1 = tf.reshape(h_1,  tf.pack( [ tf.shape(h_1)[0], dim[1] * dim[2] * dim[3]] )   ) 
