@@ -102,6 +102,8 @@ def generator(input_noise, reuse = False, is_training=False):
     return h_2
 
 
+
+
 def discriminator(input_images, reuse = False, is_training=False):
     #x = tf.reshape(input_images,  tf.pack([ tf.shape(input_images)[0],  28*28 ]) )   
     
